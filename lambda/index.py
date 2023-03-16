@@ -17,9 +17,7 @@ def handler(event, context):
 
     results = response.json()['@graph']
 
-    if bool(event.get('queryStringParameters', {}).get('summarize')):
-
-
+    if event.get('queryStringParameters', {}).get('summarize'):
 
         results = []
 
