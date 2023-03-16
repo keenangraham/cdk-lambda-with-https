@@ -1,4 +1,6 @@
 from aws_cdk import App
+from aws_cdk import CfnOutput
+from aws_cdk import Duration
 from aws_cdk import Environment
 from aws_cdk import Stack
 
@@ -27,10 +29,17 @@ class LambdaWithHttpsStack(Stack):
             runtime=Runtime.PYTHON_3_9,
             entry='lambda',
             memory_size=512,
+            timeout=Duration.seconds(60),
         )
 
-        python_function.add_function_url(
+        function_url = python_function.add_function_url(
             auth_type=FunctionUrlAuthType.NONE,
+        )
+
+        CfnOutput(
+            self,
+            'LambdaURL',
+            value=function_url.url,
         )
 
 
