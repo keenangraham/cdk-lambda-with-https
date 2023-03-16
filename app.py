@@ -2,6 +2,11 @@ from aws_cdk import App
 from aws_cdk import Environment
 from aws_cdk import Stack
 
+from aws_cdk.aws_lambda import Runtime
+from aws_cdk.aws_lambda import FunctionUrlAuthType
+
+from aws_cdk.aws_lambda_python_alpha import PythonFunction
+
 from constructs import Construct
 
 
@@ -16,6 +21,18 @@ class LambdaWithHttpsStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
+        python_function = PythonFunction(
+            self,
+            'PythonFunction',
+            runtime=Runtime.PYTHON_3_9,
+            entry='lambda',
+            memory_size=512,
+        )
+
+        python_function.add_function_url(
+            auth_type=FunctionUrlAuthType.NONE,
+        )
+
 
 app = App()
 
@@ -25,5 +42,6 @@ LambdaWithHttpsStack(
     'LambdaWithHttpsStack',
     env=US_WEST_2,
 )
+
 
 app.synth()
